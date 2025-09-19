@@ -15,6 +15,9 @@ import {getFormatByFile} from '@jscpd/tokenizer';
 import {EntryWithContent, IHook, IReporter} from './interfaces';
 import {SkipLocalValidator} from './validators';
 
+/**
+ * Uses Detector from @jscpd/core
+ */
 export class InFilesDetector {
 
   private readonly reporters: IReporter[] = [];
@@ -66,7 +69,7 @@ export class InFilesDetector {
 
     const detect = (entry: EntryWithContent, clones: IClone[] = []): Promise<IClone[]> => {
       const {path, content} = entry;
-      const format: string|undefined = getFormatByFile(path, options.formatsExts);
+      const format: string | undefined = getFormatByFile(path, options.formatsExts);
       return format !== undefined ? detector
         .detect(path, content, format)
         .then((clns: IClone[]) => {
@@ -78,7 +81,7 @@ export class InFilesDetector {
             return detect(file, clones);
           }
           return clones;
-        }): Promise.resolve([]);
+        }) : Promise.resolve([]);
     };
 
     const processHooks = (hook: IHook, detectedClones: IClone[]): Promise<IClone[]> => {
@@ -91,14 +94,14 @@ export class InFilesDetector {
           }
           return clones;
         });
-    }
+    };
 
     // @ts-ignore
     return detect(files.pop())
       .then((clones: IClone[]) => {
         const hook = hooks.pop();
         if (hook) {
-          return processHooks(hook, clones)
+          return processHooks(hook, clones);
         }
         return clones;
       })

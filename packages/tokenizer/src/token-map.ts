@@ -11,6 +11,9 @@ function createTokenHash(token: IToken, hashFunction: (value: string) => string 
 		hash(token.type + token.value).substr(0, TOKEN_HASH_LENGTH);
 }
 
+/**
+ * Groups tokens by their format-property
+ */
 function groupByFormat(tokens: IToken[]): { [key: string]: IToken[] } {
 	const result: { [key: string]: IToken[] } = {};
 	// TODO change to reduce
@@ -21,8 +24,14 @@ function groupByFormat(tokens: IToken[]): { [key: string]: IToken[] } {
 }
 
 export class TokensMap implements ITokensMap, Iterator<IMapFrame|boolean>, Iterable<IMapFrame|boolean> {
+  /**
+   * Token-index, position 'inside' the hash-reel (below)
+   */
 	private position = 0;
-	private hashMap: string;
+  /**
+   * a hash-reel -- a list of token hashes joined into a single string
+   */
+	private readonly hashMap: string;
 
 	constructor(
     private readonly id: string,
@@ -67,6 +76,7 @@ export class TokensMap implements ITokensMap, Iterator<IMapFrame|boolean>, Itera
 			),
 		).substring(0, TOKEN_HASH_LENGTH);
 
+    // isBeforeEnd
 		if (this.position < this.tokens.length - this.options.minTokens) {
 			this.position++;
 			return {
@@ -94,6 +104,9 @@ export function generateMapsForFormats(id: string, data: string, tokens: IToken[
     .map((formatTokens: IToken[]) => new TokensMap(id, data, formatTokens, formatTokens[0].format, options));
 }
 
+/**
+ * Generates a TokensMap for each format found in tokens
+ */
 export function createTokensMaps(id: string, data: string, tokens: IToken[], options): TokensMap[] {
   return generateMapsForFormats(id, data, tokens, options);
 }

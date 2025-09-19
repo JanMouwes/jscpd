@@ -4,7 +4,7 @@ import {IReporter} from '..';
 import {getOption, IClone, IOptions} from '@jscpd/core';
 import {escapeXml, getPath} from '../utils/reports';
 import {green} from 'colors/safe';
-import {join} from "path";
+import {join} from 'path';
 
 export class XmlReporter implements IReporter {
   constructor(private options: IOptions) {
@@ -28,11 +28,11 @@ export class XmlReporter implements IReporter {
             <codefragment><![CDATA[${clone.duplicationA.fragment?.replace(/]]>/i, 'CDATA_END')}]]></codefragment>
         </duplication>
       `;
-		});
-		xmlDoc += '</pmd-cpd>';
+    });
+    xmlDoc += '</pmd-cpd>';
 
-		ensureDirSync(getOption('output', this.options));
-		writeFileSync(getOption('output', this.options) + '/jscpd-report.xml', xmlDoc);
-		console.log(green(`XML report saved to ${join(this.options.output as string, 'jscpd-report.xml')}`));
-	}
+    ensureDirSync(getOption('output', this.options));
+    writeFileSync(getOption('output', this.options) + '/jscpd-report.xml', xmlDoc);
+    console.log(green(`XML report saved to ${join(this.options.output as string, 'jscpd-report.xml')}`));
+  }
 }

@@ -1,10 +1,10 @@
-import {getOption, IClone, IOptions, IStatistic} from "@jscpd/core";
-import {ensureDirSync, writeFileSync} from "fs-extra";
-import {green} from "colors/safe";
-import {join} from "path";
-import {convertStatisticToArray} from "../utils/reports";
+import {getOption, IClone, IOptions, IStatistic} from '@jscpd/core';
+import {ensureDirSync, writeFileSync} from 'fs-extra';
+import {green} from 'colors/safe';
+import {join} from 'path';
+import {convertStatisticToArray} from '../utils/reports';
 import {IReporter} from '..';
-import markdownTable from "markdown-table";
+import markdownTable from 'markdown-table';
 
 export class MarkdownReporter implements IReporter {
 
@@ -19,7 +19,8 @@ export class MarkdownReporter implements IReporter {
 
 ${markdownTable([
       ['Format', 'Files analyzed', 'Total lines', 'Total tokens', 'Clones found', 'Duplicated lines', 'Duplicated tokens'],
-      ...Object.keys((statistic as any).formats).map((format: string) => convertStatisticToArray(format, (statistic as any).formats[format].total)),
+      ...Object.keys((statistic as any).formats)
+               .map((format: string) => convertStatisticToArray(format, (statistic as any).formats[format].total)),
       convertStatisticToArray('Total:', (statistic as any).total).map(item => `**${item}**`)
     ])}
 `;

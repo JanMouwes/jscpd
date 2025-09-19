@@ -25,6 +25,13 @@ export class Detector extends EventEmitter<DetectorEvents> {
     this.options.mode = this.options.mode || mild;
   }
 
+  /**
+   *
+   * @param {string} id 'file name'
+   * @param {string} text 'file content'
+   * @param {string} format 'file type'
+   * @returns {Promise<IClone[]>}
+   */
   public async detect(id: string, text: string, format: string): Promise<IClone[]> {
     const tokenMaps: ITokensMap[] = this.tokenizer.generateMaps(id, text, format, this.options);
     // TODO change stores implementation

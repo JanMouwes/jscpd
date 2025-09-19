@@ -1,9 +1,9 @@
 // @ts-ignore
 import * as reprism from 'reprism';
-import {FORMATS} from './formats';
-import {createTokensMaps, TokensMap} from './token-map';
 import {IOptions, IToken} from '@jscpd/core';
+import {FORMATS} from './formats';
 import {loadLanguages} from './grammar-loader';
+import {createTokensMaps, TokensMap} from './token-map';
 
 const ignore = {
   ignore: [
@@ -40,10 +40,10 @@ const initializeFormats = (): void => {
           ...ignore,
           ...reprism.default.languages[lang],
           ...punctuation,
-        }
+        };
       }
     });
-}
+};
 
 initializeFormats();
 
@@ -128,13 +128,13 @@ export function tokenize(code: string, language: string): IToken[] {
   let tokens: IToken[] = [];
   const grammar = reprism.default.languages[getLanguagePrismName(language)];
   if (!reprism.default.languages[getLanguagePrismName(language)]) {
-    console.warn('Warn: jscpd has issue with support of "' + getLanguagePrismName(language) + '"')
+    console.warn('Warn: jscpd has issue with support of "' + getLanguagePrismName(language) + '"');
     return [];
   }
   reprism.default.tokenize(code, grammar)
-    .forEach(
-      (t: IToken) => (tokens = tokens.concat(createTokens(t, language))),
-    );
+         .forEach(
+           (t: IToken) => (tokens = tokens.concat(createTokens(t, language))),
+         );
   return tokens
     .filter((t: IToken) => t.format in FORMATS)
     .map(
@@ -142,26 +142,31 @@ export function tokenize(code: string, language: string): IToken[] {
     );
 }
 
-function setupIgnorePatterns(format: string, ignorePattern: string[]): void{
+function setupIgnorePatterns(format: string, ignorePattern: string[]): void {
   const language = getLanguagePrismName(format);
-  const ignorePatterns = ignorePattern.map(pattern=>({
+  const ignorePatterns = ignorePattern.map(pattern => ({
     pattern: new RegExp(pattern),
     greedy: false,
-  }))
+  }));
 
   reprism.default.languages[language] = {
     ...ignorePatterns,
     ...reprism.default.languages[language],
-  }
+  };
 }
 
-export function createTokenMapBasedOnCode(id: string, data: string, format: string, options: Partial<IOptions> = {}): TokensMap[] {
+export function createTokenMapBasedOnCode(
+  id: string,
+  data: string,
+  format: string,
+  options: Partial<IOptions> = {}
+): TokensMap[] {
   const {mode, ignoreCase, ignorePattern} = options;
 
   const tokens: IToken[] = tokenize(data, format)
-    .filter((token) => mode(token, options))
+    .filter((token) => mode(token, options));
 
-  if(ignorePattern) setupIgnorePatterns(format, options.ignorePattern || [] )
+  if (ignorePattern) setupIgnorePatterns(format, options.ignorePattern || []);
 
   if (ignoreCase) {
     return createTokensMaps(id, data, tokens.map(

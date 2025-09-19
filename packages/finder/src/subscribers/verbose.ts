@@ -1,13 +1,13 @@
-import {grey, yellow} from 'colors/safe';
 import {DetectorEvents, IEventPayload, IHandler, IOptions, ISubscriber} from '@jscpd/core';
+import {grey, yellow} from 'colors/safe';
 
 export class VerboseSubscriber implements ISubscriber {
 
-	constructor(protected options: IOptions) {
-	}
+  constructor(protected options: IOptions) {
+  }
 
-	subscribe(): Partial<Record<DetectorEvents, IHandler>> {
-		return {
+  subscribe(): Partial<Record<DetectorEvents, IHandler>> {
+    return {
       'CLONE_FOUND': (payload: IEventPayload): void => {
         const {clone} = payload;
         console.log(yellow('CLONE_FOUND'));
@@ -25,8 +25,8 @@ export class VerboseSubscriber implements ISubscriber {
         console.log(yellow('START_DETECTION'));
         console.log(
           grey('Start detection for source id=' + source?.getId() + ' format=' + source?.getFormat()),
-        )
+        );
       },
     };
-	}
+  }
 }

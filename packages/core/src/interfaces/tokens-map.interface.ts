@@ -1,5 +1,8 @@
 import {IMapFrame} from '.';
 
+/**
+ * Provides 'map frames' to detector
+ */
 export interface ITokensMap {
 
   getFormat(): string;
